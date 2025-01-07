@@ -1,10 +1,27 @@
-# [HomeCloud](https://homecloud.suryansh.one)
+# HomeCloud
 
-**Development Starting Soon** - [Roadmap (Draft)](https://github.com/users/drk1rd/projects/4)
+HomeCloud is a self-hosted cloud platform that lets you run your own infrastructure on local servers, offering the same capabilities as services like AWS—but without the reliance on third parties. It's designed for developers, homelab enthusiasts, and anyone who wants more control and privacy over their data.
 
-HomeCloud is an open-source initiative aimed at creating a self-hosted cloud computing platform for personal servers.
+## Concept
 
-[concept?](https://homecloud.suryansh.one/Project%20Concept_%20_HomeCloud_.pdf)  
-[but, why?](https://homecloud.suryansh.one/but,%20why_.pdf)
+HomeCloud brings the power of cloud computing into your home. It replicates the most essential AWS services on your own hardware, giving you the freedom to deploy, manage, and scale apps at home or in a small office—while maintaining full control over your data.
 
-[discord](https://discord.gg/pemra9uaC9)
+Learn more: [Project Concept](https://homecloud.suryansh.one/files/Project%20Concept_%20_HomeCloud_.pdf)
+
+## Why HomeCloud?
+
+If you want to experiment with cloud-like services, maintain full control over your data, or build your own infrastructure at home, HomeCloud is for you. It's perfect for developers who want hands-on experience, small businesses needing private cloud solutions, and anyone who values privacy and flexibility.
+
+Explore more: [Why HomeCloud?](https://homecloud.suryansh.one/files/but,%20why_.pdf)
+
+## Roadmap
+
+We’re gradually building HomeCloud to cover the core services you'd expect from a cloud provider—from compute and storage to serverless functions and databases. Each phase adds new features, with plenty more to come. Please note, the roadmap is a draft and may change as we continue development.
+
+Check out the full roadmap (draft): [HomeCloud Roadmap](https://github.com/users/drk1rd/projects/4)
+
+## Get Involved
+
+HomeCloud is an open-source project, and we'd love for you to be a part of it. Whether you're contributing to development, offering feedback, or just chatting with the community, there's a place for you.
+
+Join us on Discord: [HomeCloud Discord](https://homecloud.suryansh.one/discord)

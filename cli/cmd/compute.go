@@ -109,12 +109,22 @@ var createCmd = &cobra.Command{
 			fmt.Printf("Successfully pulled image %s\n", baseImage)
 		}
 
-		// Create and start the Docker container
+		// Adjust CPU shares to Docker-compatible value (1024 is default, higher is more CPU weight)
+		cpuShares := cpu * 1024 // Multiply logical CPUs to match Docker's CPU weight
+
+		// Convert RAM from MB to bytes
+		memoryBytes := int64(ram) * 1024 * 1024
+
+		// Create and start the Docker container with resource limits
 		container, err := client.CreateContainer(docker.CreateContainerOptions{
 			Name: name,
 			Config: &docker.Config{
 				Image: baseImage,
-				Cmd:   []string{"sh", "-c", "while true; do sleep 30; done"}, // Keeps the container running
+				Cmd:   []string{"sh", "-c", "while true; do sleep 30; done"},
+			},
+			HostConfig: &docker.HostConfig{
+				CPUShares: int64(cpuShares), // Set CPU shares
+				Memory:    memoryBytes,      // Set RAM limit
 			},
 		})
 		if err != nil {
@@ -122,6 +132,7 @@ var createCmd = &cobra.Command{
 		}
 		fmt.Println("Docker container created:", container.Name)
 
+		// Start the container
 		err = client.StartContainer(container.ID, nil)
 		if err != nil {
 			log.Fatalf("Error starting Docker container: %v\n", err)

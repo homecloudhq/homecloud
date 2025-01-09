@@ -4,15 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
-	"time"
 
+	docker "github.com/fsouza/go-dockerclient"
 	"github.com/spf13/cobra"
 )
 
 const stateFile = "compute.json"
 
-// Instance represents a compute instance with its configuration and status.
+// Instance represents a compute instance with its configuration and status
 type Instance struct {
 	ID        string `json:"id"`
 	Name      string `json:"name"`
@@ -23,35 +24,32 @@ type Instance struct {
 	Status    string `json:"status"`
 }
 
-// instances holds the current state of all compute instances.
+// Global map to store instances
 var instances = make(map[string]Instance)
 
-// Command-line flags for creating a new instance.
-var name string
-var cpu int
-var ram int
-var storage int
-var baseImage string
+// Command-line flags
+var (
+	name      string
+	cpu       int
+	ram       int
+	storage   int
+	baseImage string = "python:3.10-alpine"
+)
 
-// computeCmd is the root command for managing compute resources.
+// Root command for compute operations
 var computeCmd = &cobra.Command{
 	Use:   "compute",
-	Short: "Manage compute resources in HomeCloud",
-	Long: `The compute command allows you to deploy, manage, and monitor
-containerized applications in your self-hosted HomeCloud environment.`,
+	Short: "Manage compute resources with Docker",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
 }
 
 func init() {
-	// Register the compute command with the root command.
 	rootCmd.AddCommand(computeCmd)
-
-	// Load existing instances from the state file.
 	loadInstances()
 
-	// Add subcommands for compute management.
+	// Add subcommands to the compute command
 	computeCmd.AddCommand(createCmd)
 	computeCmd.AddCommand(listCmd)
 	computeCmd.AddCommand(startCmd)
@@ -59,41 +57,78 @@ func init() {
 	computeCmd.AddCommand(deleteCmd)
 }
 
-// saveInstances writes the current state of instances to the state file.
+// saveInstances saves the current state of instances to a JSON file
 func saveInstances() {
 	data, err := json.MarshalIndent(instances, "", "  ")
 	if err != nil {
-		fmt.Printf("Error saving instances: %v\n", err)
+		log.Printf("Error saving instances: %v\n", err)
 		return
 	}
 	err = ioutil.WriteFile(stateFile, data, 0644)
 	if err != nil {
-		fmt.Printf("Error writing to state file: %v\n", err)
+		log.Printf("Error writing to state file: %v\n", err)
 	}
 }
 
-// loadInstances reads the state file and populates the instances map.
+// loadInstances loads the state of instances from a JSON file
 func loadInstances() {
 	if _, err := os.Stat(stateFile); os.IsNotExist(err) {
-		return // No state file, nothing to load
+		return
 	}
 	data, err := ioutil.ReadFile(stateFile)
 	if err != nil {
-		fmt.Printf("Error reading state file: %v\n", err)
+		log.Printf("Error reading state file: %v\n", err)
 		return
 	}
 	err = json.Unmarshal(data, &instances)
 	if err != nil {
-		fmt.Printf("Error parsing state file: %v\n", err)
+		log.Printf("Error parsing state file: %v\n", err)
 	}
 }
 
-// createCmd creates a new compute instance with the specified configuration.
+// createCmd creates a new Docker container and registers it as an instance
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "Create a new compute instance",
+	Short: "Create a new compute instance (Docker container)",
 	Run: func(cmd *cobra.Command, args []string) {
-		id := fmt.Sprintf("instance-%d", time.Now().Unix())
+		client, err := docker.NewClientFromEnv()
+		if err != nil {
+			log.Fatalf("Error creating Docker client: %v\n", err)
+		}
+
+		// Pull the base image if not available locally
+		if _, err := client.InspectImage(baseImage); err != nil {
+			fmt.Println("Image not found locally, pulling from Docker Hub...")
+			err = client.PullImage(docker.PullImageOptions{
+				Repository: baseImage,
+			}, docker.AuthConfiguration{})
+			if err != nil {
+				log.Fatalf("Error pulling image %s: %v\n", baseImage, err)
+			}
+			fmt.Printf("Successfully pulled image %s\n", baseImage)
+		}
+
+		// Create and start the Docker container
+		container, err := client.CreateContainer(docker.CreateContainerOptions{
+			Name: name,
+			Config: &docker.Config{
+				Image: baseImage,
+				Cmd:   []string{"sh", "-c", "while true; do sleep 30; done"}, // Keeps the container running
+			},
+		})
+		if err != nil {
+			log.Fatalf("Error creating Docker container: %v\n", err)
+		}
+		fmt.Println("Docker container created:", container.Name)
+
+		err = client.StartContainer(container.ID, nil)
+		if err != nil {
+			log.Fatalf("Error starting Docker container: %v\n", err)
+		}
+		fmt.Println("Docker container started in detached mode:", container.Name)
+
+		// Register the instance
+		id := container.ID
 		instance := Instance{
 			ID:        id,
 			Name:      name,
@@ -110,37 +145,59 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	// Define flags for the create command.
-	createCmd.Flags().StringVarP(&name, "name", "n", "", "Name of the instance (required)")
+	// Define flags for the create command
+	createCmd.Flags().StringVarP(&name, "name", "n", "", "Name of the container/instance (required)")
 	createCmd.Flags().IntVarP(&cpu, "cpu", "c", 1, "Number of CPU cores")
 	createCmd.Flags().IntVarP(&ram, "ram", "r", 512, "Amount of RAM in MB")
 	createCmd.Flags().IntVarP(&storage, "storage", "s", 10, "Storage size in GB")
-	createCmd.Flags().StringVarP(&baseImage, "image", "i", "ubuntu", "Base image for the instance")
+	createCmd.Flags().StringVarP(&baseImage, "image", "i", "python:3.10-alpine", "Base image for the container/instance")
 	createCmd.MarkFlagRequired("name")
 }
 
-// listCmd lists all existing compute instances.
+// listCmd lists all Docker containers and registered instances
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List all compute instances",
+	Short: "List all compute instances (Docker containers)",
 	Run: func(cmd *cobra.Command, args []string) {
+		client, err := docker.NewClientFromEnv()
+		if err != nil {
+			log.Fatal(err)
+		}
+		containers, err := client.ListContainers(docker.ListContainersOptions{All: true})
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, c := range containers {
+			fmt.Printf("Docker Container ID: %s Image: %s Names: %v Status: %s\n", c.ID, c.Image, c.Names, c.Status)
+		}
+
 		if len(instances) == 0 {
 			fmt.Println("No instances found.")
 			return
 		}
 		for _, instance := range instances {
-			fmt.Printf("ID: %s, Name: %s, CPU: %d, RAM: %dMB, Storage: %dGB, Status: %s\n",
+			fmt.Printf("Instance ID: %s, Name: %s, CPU: %d, RAM: %dMB, Storage: %dGB, Status: %s\n",
 				instance.ID, instance.Name, instance.CPU, instance.RAM, instance.Storage, instance.Status)
 		}
 	},
 }
 
-// startCmd starts a specified compute instance.
+// startCmd starts a stopped Docker container and updates its status
 var startCmd = &cobra.Command{
-	Use:   "start [instance ID]",
-	Short: "Start a compute instance",
+	Use:   "start [container/instance ID]",
+	Short: "Start a compute instance (Docker container)",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		client, err := docker.NewClientFromEnv()
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = client.StartContainer(args[0], nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("Docker container started:", args[0])
+
 		id := args[0]
 		instance, exists := instances[id]
 		if !exists {
@@ -158,12 +215,22 @@ var startCmd = &cobra.Command{
 	},
 }
 
-// stopCmd stops a specified compute instance.
+// stopCmd stops a running Docker container and updates its status
 var stopCmd = &cobra.Command{
-	Use:   "stop [instance ID]",
-	Short: "Stop a compute instance",
+	Use:   "stop [container/instance ID]",
+	Short: "Stop a compute instance (Docker container)",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		client, err := docker.NewClientFromEnv()
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = client.StopContainer(args[0], 5)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("Docker container stopped:", args[0])
+
 		id := args[0]
 		instance, exists := instances[id]
 		if !exists {
@@ -181,12 +248,26 @@ var stopCmd = &cobra.Command{
 	},
 }
 
-// deleteCmd deletes a specified compute instance.
+// deleteCmd deletes a Docker container and removes its registration
 var deleteCmd = &cobra.Command{
-	Use:   "delete [instance ID]",
-	Short: "Delete a compute instance",
+	Use:   "delete [container/instance ID]",
+	Short: "Delete a compute instance (Docker container)",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		// Delete Docker container
+		client, err := docker.NewClientFromEnv()
+		if err != nil {
+			log.Fatal(err)
+		}
+		removeOpts := docker.RemoveContainerOptions{
+			ID:    args[0],
+			Force: true,
+		}
+		if err := client.RemoveContainer(removeOpts); err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("Docker container deleted:", args[0])
+
 		id := args[0]
 		_, exists := instances[id]
 		if !exists {

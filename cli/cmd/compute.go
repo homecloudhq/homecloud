@@ -53,6 +53,7 @@ func init() {
 	computeCmd.AddCommand(createCmd)
 	computeCmd.AddCommand(listCmd)
 	computeCmd.AddCommand(startCmd)
+	computeCmd.AddCommand(enterCmd)
 	computeCmd.AddCommand(stopCmd)
 	computeCmd.AddCommand(deleteCmd)
 }
@@ -212,6 +213,58 @@ var startCmd = &cobra.Command{
 		instances[id] = instance
 		saveInstances()
 		fmt.Printf("Instance %s started.\n", id)
+	},
+}
+
+// enterCmd allows entering a Docker container interactively
+var enterCmd = &cobra.Command{
+	Use:   "enter [container/instance ID]",
+	Short: "Enter a compute instance (Docker container) interactively",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		containerID := args[0]
+
+		// Check if the container exists
+		client, err := docker.NewClientFromEnv()
+		if err != nil {
+			log.Fatal(err)
+		}
+		container, err := client.InspectContainer(containerID)
+		if err != nil {
+			log.Fatalf("Error inspecting container: %v\n", err)
+		}
+
+		// Check if the container is running
+		if !container.State.Running {
+			log.Fatalf("Container %s is not running. Start it first using 'start' command.\n", containerID)
+		}
+
+		// Run a shell session inside the container
+		execOptions := docker.CreateExecOptions{
+			Container:    containerID,
+			Cmd:          []string{"sh"},
+			AttachStdin:  true,
+			AttachStdout: true,
+			AttachStderr: true,
+			Tty:          true,
+		}
+		exec, err := client.CreateExec(execOptions)
+		if err != nil {
+			log.Fatalf("Error creating exec instance: %v\n", err)
+		}
+
+		// Attach to the exec session
+		err = client.StartExec(exec.ID, docker.StartExecOptions{
+			Tty:          true,
+			Detach:       false,
+			InputStream:  os.Stdin,
+			OutputStream: os.Stdout,
+			ErrorStream:  os.Stderr,
+			RawTerminal:  true,
+		})
+		if err != nil {
+			log.Fatalf("Error starting exec session: %v\n", err)
+		}
 	},
 }
 

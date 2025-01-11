@@ -22,6 +22,6 @@ Check out the full roadmap (draft): [HomeCloud Roadmap](https://github.com/users
 
 ## Get Involved
 
-HomeCloud is an open-source project, and we'd love for you to be a part of it. Whether you're contributing to development, offering feedback, or just chatting with the community, there's a place for you.
+HomeCloud is an open-source project, and we'd love for you to be a part of it. Whether you're contributing to development, offering feedback, or just chatting with the community, there's a place for you. [It will be active once we launch a minor version.]
 
 Join us on Discord: [HomeCloud Discord](https://homecloud.suryansh.one/discord)

@@ -18,10 +18,21 @@ Explore more: [Why HomeCloud?](https://homecloud.suryansh.one/files/but,%20why_.
 
 We’re gradually building HomeCloud to cover the core services you'd expect from a cloud provider—from compute and storage to serverless functions and databases. Each phase adds new features, with plenty more to come. Please note, the roadmap is a draft and may change as we continue development.
 
-Check out the full roadmap (draft): [HomeCloud Roadmap](https://github.com/users/drk1rd/projects/4)
+Check out the full roadmap (draft): [HomeCloud Roadmap](https://github.com/users/drk1rd/projects/4)  
+
+## License
+
+HomeCloud is released under the GNU Affero General Public License v3.0 (AGPL-3.0).
+This ensures that the project remains open-source, and any modifications or derived works shared publicly must also be under the AGPL-3.0 license.
+
+For more details, check the [LICENSE](./LICENSE) file.
 
 ## Get Involved
 
 HomeCloud is an open-source project, and we'd love for you to be a part of it. Whether you're contributing to development, offering feedback, or just chatting with the community, there's a place for you. [It will be active once we launch a minor version.]
 
 Join us on Discord: [HomeCloud Discord](https://homecloud.suryansh.one/discord)
+
+## Contributor License Agreement (CLA)
+
+By contributing to this project, you agree to the [Contributor License Agreement (CLA)](./CLA).

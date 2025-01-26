@@ -35,4 +35,4 @@ Join us on Discord: [HomeCloud Discord](https://homecloud.suryansh.one/discord)
 
 ## Contributor License Agreement (CLA)
 
-By contributing to this project, you agree to the [Contributor License Agreement (CLA)](./CLA.md).
+By contributing to this project, you agree to the [Contributor License Agreement (CLA)](./CLA.md), automatically.

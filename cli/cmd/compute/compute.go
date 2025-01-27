@@ -1,4 +1,4 @@
-package cmd
+package compute
 
 import (
 	"encoding/json"
@@ -9,10 +9,23 @@ import (
 
 	docker "github.com/fsouza/go-dockerclient"
 	"github.com/spf13/cobra"
+	
 )
 
 const stateFile = "compute.json"
 
+func init() {
+	// Load saved instances
+	loadInstances()
+
+	// Add subcommands to the compute command
+	ComputeCmd.AddCommand(createCmd)
+	ComputeCmd.AddCommand(listCmd)
+	ComputeCmd.AddCommand(startCmd)
+	ComputeCmd.AddCommand(enterCmd)
+	ComputeCmd.AddCommand(stopCmd)
+	ComputeCmd.AddCommand(deleteCmd)
+}
 // Instance represents a compute instance with its configuration and status
 type Instance struct {
 	ID        string `json:"id"`
@@ -37,26 +50,15 @@ var (
 )
 
 // Root command for compute operations
-var computeCmd = &cobra.Command{
-	Use:   "compute",
-	Short: "Manage compute resources with Docker",
-	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Help()
-	},
+var ComputeCmd = &cobra.Command{
+    Use:   "compute",
+    Short: "Manage compute resources",
+    Long:  "The compute command allows you to manage compute resources like VMs, containers, etc.",
+    Run: func(cmd *cobra.Command, args []string) {
+        cmd.Help()
+    },
 }
 
-func init() {
-	rootCmd.AddCommand(computeCmd)
-	loadInstances()
-
-	// Add subcommands to the compute command
-	computeCmd.AddCommand(createCmd)
-	computeCmd.AddCommand(listCmd)
-	computeCmd.AddCommand(startCmd)
-	computeCmd.AddCommand(enterCmd)
-	computeCmd.AddCommand(stopCmd)
-	computeCmd.AddCommand(deleteCmd)
-}
 
 // saveInstances saves the current state of instances to a JSON file
 func saveInstances() {

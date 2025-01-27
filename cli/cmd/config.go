@@ -115,17 +115,17 @@ var configCmd = &cobra.Command{
 }
 
 func init() {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		panic(err)
-	}
-	// Set the path to the config file in the user's home directory
-	configFile = filepath.Join(home, ".homecloud_config.json")
+    home, err := os.UserHomeDir()
+    if err != nil {
+        panic(err)
+    }
+    // Set the path to the config file in the user's home directory
+    configFile = filepath.Join(home, ".homecloud_config.json")
 
-	// Add subcommands to the config command
-	configCmd.AddCommand(setConfigCmd)
-	configCmd.AddCommand(getConfigCmd)
+    // Add subcommands to the config command
+    configCmd.AddCommand(setConfigCmd)
+    configCmd.AddCommand(getConfigCmd)
 
-	// Add the config command to the root command
-	rootCmd.AddCommand(configCmd)
+    // Add the config command to the RootCmd
+    RootCmd.AddCommand(configCmd) // Use RootCmd here
 }

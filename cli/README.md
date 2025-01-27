@@ -8,7 +8,8 @@ This folder contains the implementation of the HomeCloud CLI tool. The CLI inter
 cli/
 ├── cmd/
 │   ├── root.go         # Root command of the CLI
-│   ├── compute.go      # Subcommand for managing compute resources (Docker-based)
+│   ├── compute/        # Component specifc folder
+│       ├── compute.go      # Subcommand for managing compute resources (Docker-based)
 │   ├── config.go       # Subcommand for managing CLI configurations
 ├── main.go             # Entry point for the CLI application
 ├── go.mod              # Go module file

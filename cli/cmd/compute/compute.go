@@ -67,6 +67,8 @@ func init() {
 	ComputeCmd.AddCommand(enterCmd)
 	ComputeCmd.AddCommand(stopCmd)
 	ComputeCmd.AddCommand(deleteCmd)
+	ComputeCmd.AddCommand(infoCmd)
+
 }
 
 func saveInstances() {
@@ -488,35 +490,71 @@ var deleteCmd = &cobra.Command{
 		}
 		defer conn.Close()
 
+		// First, try to stop and undefine the domain
 		domain, err := conn.LookupDomainByUUIDString(vmUUID)
 		if err != nil {
 			log.Printf("Warning: domain not found in libvirt: %v\n", err)
 		} else {
 			defer domain.Free()
 
+			// If running, destroy it first
 			active, _ := domain.IsActive()
 			if active {
 				if err := domain.Destroy(); err != nil {
 					log.Fatalf("Failed to stop domain: %v\n", err)
 				}
+				log.Printf("Stopped running VM: %s\n", instance.Name)
 			}
 
+			// Undefine the domain
 			err = domain.Undefine()
 			if err != nil {
 				log.Fatalf("Failed to undefine domain: %v\n", err)
 			}
+			log.Printf("Undefined VM: %s\n", instance.Name)
 		}
 
-		// Clean up the image file
+		// Delete the VM's disk image
 		if instance.BaseImage != "" {
+			// Use sudo to remove the image file
 			cmd := exec.Command("sudo", "rm", "-f", instance.BaseImage)
 			if err := cmd.Run(); err != nil {
-				log.Printf("Warning: failed to remove image file: %v\n", err)
+				log.Printf("Warning: failed to remove VM image file %s: %v\n", instance.BaseImage, err)
+			} else {
+				log.Printf("Removed VM image: %s\n", instance.BaseImage)
 			}
 		}
 
+		// Remove from our JSON state
 		delete(instances, vmUUID)
 		saveInstances()
-		fmt.Printf("VM %s [%s] has been deleted.\n", instance.Name, vmUUID)
+
+		fmt.Printf("Successfully deleted VM %s [%s] and cleaned up resources.\n", instance.Name, vmUUID)
+	},
+}
+
+var infoCmd = &cobra.Command{
+	Use:   "info [VM UUID]",
+	Short: "Show detailed information about a VM",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		vmUUID := args[0]
+		instance, ok := instances[vmUUID]
+		if !ok {
+			fmt.Printf("Instance with UUID %s not found.\n", vmUUID)
+			return
+		}
+
+		fmt.Printf("VM Details:\n")
+		fmt.Printf("  Name: %s\n", instance.Name)
+		fmt.Printf("  UUID: %s\n", instance.ID)
+		fmt.Printf("  CPU Cores: %d\n", instance.CPU)
+		fmt.Printf("  RAM: %d MB\n", instance.RAM)
+		fmt.Printf("  Storage: %d GB\n", instance.Storage)
+		fmt.Printf("  Base Image: %s\n", instance.BaseImage)
+		fmt.Printf("  Status: %s\n", instance.Status)
+		fmt.Printf("  Created At: %s\n", instance.CreatedAt)
+		fmt.Printf("  Created By: %s\n", instance.CreatedBy)
+		fmt.Printf("  Last Updated: %s\n", instance.LastUpdated)
 	},
 }

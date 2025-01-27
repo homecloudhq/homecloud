@@ -18,7 +18,7 @@ Explore more: [Why HomeCloud?](https://homecloud.suryansh.one/files/but,%20why_.
 
 We’re gradually building HomeCloud to cover the core services you'd expect from a cloud provider—from compute and storage to serverless functions and databases. Each phase adds new features, with plenty more to come. Please note, the roadmap is a draft and may change as we continue development.
 
-Check out the full roadmap (draft): [HomeCloud Roadmap](https://github.com/users/drk1rd/projects/4)  
+Check out the full roadmap (draft): [HomeCloud Roadmap](https://github.com/orgs/homecloudhq/projects/1/views/1)  
 
 ## License
 

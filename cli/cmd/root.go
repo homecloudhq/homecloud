@@ -4,7 +4,7 @@ import (
     "fmt"
 
     "github.com/spf13/cobra"
-	"github.com/drk1rd/homecloud/cli/cmd/compute"
+	"github.com/homecloudhq/homecloud/cli/cmd/compute"
 )
 
 // RootCmd is the base command for the CLI, exported for use in other modules.

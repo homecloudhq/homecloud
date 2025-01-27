@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/drk1rd/homecloud/cli/cmd"
+	"github.com/homecloudhq/homecloud/cli/cmd"
 )
 
 func main() {

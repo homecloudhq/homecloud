@@ -1,4 +1,4 @@
-module github.com/drk1rd/homecloud/cli
+module github.com/homecloudhq/homecloud/cli
 
 go 1.23.4
 
@@ -29,7 +29,5 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stretchr/testify v1.10.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
-	gotest.tools/v3 v3.5.1 // indirect
 )

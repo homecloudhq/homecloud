@@ -11,7 +11,7 @@ You certify that:
 
 ## 2. License Grant
 
-You grant **Suryansh Prajapati (drk1rd)**, the project maintainer, a perpetual, worldwide, non-exclusive, royalty-free, sublicensable license to:
+You grant **HomeCloudHQ (drk1rd)**, the project maintainer, a perpetual, worldwide, non-exclusive, royalty-free, sublicensable license to:
 
 - Use, reproduce, modify, adapt, publish, translate, distribute, publicly display, and create derivative works of your contributions.
 - Include your contributions as part of the project or any version of the project, even if the project is re-licensed in the future.

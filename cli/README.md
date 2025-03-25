@@ -1,7 +1,3 @@
-Got it — let’s clean up the S3 section to match the brief style of `compute`:
-
----
-
 # HomeCloud CLI  
 
 This folder contains the implementation of the HomeCloud CLI tool. The CLI interacts with HomeCloud services and manages various aspects of the system, including compute resources (Docker containers) and S3-compatible storage.

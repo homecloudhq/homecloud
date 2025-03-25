@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Initialize MinIO client
+// connectMinIO initializes and returns a MinIO client
 func connectMinIO() *minio.Client {
 	client, err := minio.New("localhost:9000", &minio.Options{
 		Creds:  credentials.NewStaticV4("minioadmin", "minioadmin", ""),
@@ -22,13 +22,13 @@ func connectMinIO() *minio.Client {
 	return client
 }
 
-// Define bucket commands
+// bucketCmd defines the root command for bucket operations
 var bucketCmd = &cobra.Command{
 	Use:   "bucket",
 	Short: "Manage S3 buckets",
 }
 
-// Create bucket command
+// createBucketCmd defines the command to create a new S3 bucket
 var createBucketCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new S3 bucket",
@@ -36,6 +36,7 @@ var createBucketCmd = &cobra.Command{
 		client := connectMinIO()
 		bucketName, _ := cmd.Flags().GetString("name")
 
+		// Create a new bucket
 		err := client.MakeBucket(context.Background(), bucketName, minio.MakeBucketOptions{})
 		if err != nil {
 			log.Fatalf("Failed to create bucket: %v", err)
@@ -44,7 +45,7 @@ var createBucketCmd = &cobra.Command{
 	},
 }
 
-// Delete bucket command
+// deleteBucketCmd defines the command to delete an existing S3 bucket
 var deleteBucketCmd = &cobra.Command{
 	Use:   "delete",
 	Short: "Delete an S3 bucket",
@@ -52,6 +53,7 @@ var deleteBucketCmd = &cobra.Command{
 		client := connectMinIO()
 		bucketName, _ := cmd.Flags().GetString("name")
 
+		// Delete the specified bucket
 		err := client.RemoveBucket(context.Background(), bucketName)
 		if err != nil {
 			log.Fatalf("Failed to delete bucket: %v", err)
@@ -60,12 +62,14 @@ var deleteBucketCmd = &cobra.Command{
 	},
 }
 
-// List buckets command
+// listBucketsCmd defines the command to list all S3 buckets
 var listBucketsCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all S3 buckets",
 	Run: func(cmd *cobra.Command, args []string) {
 		client := connectMinIO()
+
+		// List all buckets
 		buckets, err := client.ListBuckets(context.Background())
 		if err != nil {
 			log.Fatalf("Failed to list buckets: %v", err)
@@ -77,10 +81,12 @@ var listBucketsCmd = &cobra.Command{
 }
 
 func init() {
+	// Add subcommands to the root bucket command
 	bucketCmd.AddCommand(createBucketCmd)
 	bucketCmd.AddCommand(deleteBucketCmd)
 	bucketCmd.AddCommand(listBucketsCmd)
 
+	// Define flags for the create and delete commands
 	createBucketCmd.Flags().StringP("name", "n", "", "Name of the bucket (required)")
 	deleteBucketCmd.Flags().StringP("name", "n", "", "Name of the bucket (required)")
 }

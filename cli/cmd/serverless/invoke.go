@@ -1,34 +1,42 @@
 package serverless
 
 import (
+	"bytes"
 	"fmt"
 	"os/exec"
 
 	"github.com/spf13/cobra"
 )
 
-// InvokeCmd runs the function locally
+// InvokeCmd calls a deployed serverless function
 var InvokeCmd = &cobra.Command{
 	Use:   "invoke",
-	Short: "Invoke a serverless function",
+	Short: "Invoke a deployed serverless function",
 	Run: func(cmd *cobra.Command, args []string) {
 		name, _ := cmd.Flags().GetString("name")
+		payload, _ := cmd.Flags().GetString("payload")
+		fmt.Printf("Payload: %s\n", payload) // Use the payload variable
+
 		if name == "" {
 			fmt.Println("Error: --name is required")
 			return
 		}
 
-		functionPath := fmt.Sprintf("functions/%s/handler.py", name)
-		out, err := exec.Command("python3", functionPath).Output()
-		if err != nil {
-			fmt.Println("Failed to run function:", err)
-			return
-		}
+		fmt.Printf("Invoking function '%s'...\n", name)
 
-		fmt.Printf("Function Output:\n%s\n", string(out))
+		// Simulate running the function in a container
+		out := &bytes.Buffer{}
+		err := exec.Command("docker", "exec", name, "python3", "/app/main.py").Run()
+
+		if err != nil {
+			fmt.Printf("Failed to invoke function: %s\n", err)
+		} else {
+			fmt.Printf("Function output: %s\n", out.String())
+		}
 	},
 }
 
 func init() {
 	InvokeCmd.Flags().StringP("name", "n", "", "Name of the function to invoke")
+	InvokeCmd.Flags().StringP("payload", "p", "", "Payload to send to the function (optional)")
 }

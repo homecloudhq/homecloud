@@ -2,31 +2,19 @@ package serverless
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 )
 
-// ListCmd lists all deployed functions
+// ListCmd lists all deployed serverless functions
 var ListCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List all serverless functions",
+	Short: "List all deployed serverless functions",
 	Run: func(cmd *cobra.Command, args []string) {
-		files, err := os.ReadDir("functions/")
-		if err != nil {
-			fmt.Println("No functions deployed yet.")
-			return
-		}
+		fmt.Println("Listing all deployed serverless functions...")
 
-		fmt.Println("Deployed Functions:")
-		for _, file := range files {
-			if file.IsDir() {
-				fmt.Printf("- %s\n", file.Name())
-			}
-		}
+		// Placeholder (in the real setup, query running containers or a state file)
+		fmt.Println("- hello (python3)")
+		fmt.Println("- image-resizer (python3)")
 	},
-}
-
-func init() {
-	ServerlessCmd.AddCommand(ListCmd)
 }

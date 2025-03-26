@@ -2,14 +2,15 @@ package serverless
 
 import (
 	"fmt"
-	"os"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 )
 
+// DeleteCmd removes a deployed serverless function
 var deleteCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "Delete a deployed serverless function",
+	Short: "Delete a serverless function",
 	Run: func(cmd *cobra.Command, args []string) {
 		name, _ := cmd.Flags().GetString("name")
 
@@ -18,25 +19,18 @@ var deleteCmd = &cobra.Command{
 			return
 		}
 
-		// Check if function exists
-		functionPath := fmt.Sprintf("functions/%s", name)
-		if _, err := os.Stat(functionPath); os.IsNotExist(err) {
-			fmt.Printf("Error: Function '%s' not found\n", name)
-			return
-		}
+		fmt.Printf("Deleting function '%s'...\n", name)
 
-		// Delete the function folder
-		err := os.RemoveAll(functionPath)
+		err := exec.Command("docker", "rm", "-f", name).Run()
+
 		if err != nil {
-			fmt.Printf("Error deleting function '%s': %s\n", name, err)
-			return
+			fmt.Printf("Failed to delete function: %s\n", err)
+		} else {
+			fmt.Printf("Function '%s' deleted successfully!\n", name)
 		}
-
-		fmt.Printf("Function '%s' deleted successfully!\n", name)
 	},
 }
 
 func init() {
 	deleteCmd.Flags().StringP("name", "n", "", "Name of the function to delete")
-	ServerlessCmd.AddCommand(deleteCmd)
 }

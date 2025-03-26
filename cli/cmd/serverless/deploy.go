@@ -3,41 +3,51 @@ package serverless
 import (
 	"fmt"
 	"os"
-	"os/exec"
-	"path/filepath"
+
+	"github.com/homecloudhq/homecloud/cli/cmd/serverless/runtime" // Ensure this matches your folder structure
 
 	"github.com/spf13/cobra"
 )
 
-// DeployCmd deploys a new serverless function
+// DeployCmd deploys a serverless function
 var DeployCmd = &cobra.Command{
 	Use:   "deploy",
 	Short: "Deploy a new serverless function",
 	Run: func(cmd *cobra.Command, args []string) {
 		name, _ := cmd.Flags().GetString("name")
 		file, _ := cmd.Flags().GetString("file")
-		runtime, _ := cmd.Flags().GetString("runtime")
+		runtimeType, _ := cmd.Flags().GetString("runtime")
 
-		if name == "" || file == "" || runtime == "" {
+		// Check for required flags
+		if name == "" || file == "" || runtimeType == "" {
 			fmt.Println("Error: --name, --file, and --runtime are required")
 			return
 		}
 
-		functionPath := filepath.Join("functions", name)
-		os.MkdirAll(functionPath, os.ModePerm)
-
-		err := exec.Command("cp", file, filepath.Join(functionPath, "handler.py")).Run()
-		if err != nil {
-			fmt.Println("Failed to copy file:", err)
+		// Ensure the file exists
+		if _, err := os.Stat(file); os.IsNotExist(err) {
+			fmt.Printf("Error: File %s not found\n", file)
 			return
 		}
 
-		fmt.Printf("Function '%s' deployed successfully!\n", name)
+		fmt.Printf("🚀 Deploying function '%s' using runtime '%s'...\n", name, runtimeType)
+
+		switch runtimeType {
+		case "python3":
+			err := runtime.DeployPythonFunction(name, file) // ✅ Calls the function from the runtime folder now
+			if err != nil {
+				fmt.Printf("❌ Failed to deploy function: %s\n", err)
+			} else {
+				fmt.Printf("✅ Function '%s' deployed successfully!\n", name)
+			}
+		default:
+			fmt.Printf("❌ Runtime '%s' is not supported yet.\n", runtimeType)
+		}
 	},
 }
 
 func init() {
 	DeployCmd.Flags().StringP("name", "n", "", "Name of the function")
-	DeployCmd.Flags().StringP("file", "f", "", "Path to the function file")
-	DeployCmd.Flags().StringP("runtime", "r", "python3", "Runtime environment")
+	DeployCmd.Flags().StringP("file", "f", "", "Path to the function code file")
+	DeployCmd.Flags().StringP("runtime", "r", "python3", "Runtime environment (default: python3)")
 }

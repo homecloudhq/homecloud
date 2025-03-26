@@ -5,6 +5,7 @@ import (
 
 	"github.com/homecloudhq/homecloud/cli/cmd/compute"
 	"github.com/homecloudhq/homecloud/cli/cmd/s3"
+	"github.com/homecloudhq/homecloud/cli/cmd/serverless"
 	"github.com/spf13/cobra"
 )
 
@@ -30,4 +31,5 @@ func Execute() {
 func init() {
 	RootCmd.AddCommand(compute.ComputeCmd)
 	RootCmd.AddCommand(s3.S3Cmd)
+	RootCmd.AddCommand(serverless.ServerlessCmd)
 }

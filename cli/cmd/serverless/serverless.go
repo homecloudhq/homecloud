@@ -15,4 +15,6 @@ func init() {
 	ServerlessCmd.AddCommand(DeployCmd)
 	ServerlessCmd.AddCommand(ListCmd)
 	ServerlessCmd.AddCommand(InvokeCmd)
+	ServerlessCmd.AddCommand(deleteCmd)
+
 }

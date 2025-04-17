@@ -48,7 +48,7 @@ HomeCloud is an open-source, self-hosted cloud platform for **compute, storage, 
    - To run, simply execute the following command in PowerShell:
 
    ```powershell
-   Invoke-WebRequest -Uri "https://homecloud.drk1rd.systems/install.ps1" -OutFile "install.ps1"
+   Invoke-WebRequest -Uri "https://homecloud.drk1rd.systems/scripts/install.ps1" -OutFile "install.ps1"
    .\install.ps1
    ```
 
@@ -58,7 +58,7 @@ HomeCloud is an open-source, self-hosted cloud platform for **compute, storage, 
    - To run the script, open your terminal and execute the following commands:
 
    ```bash
-   curl -LO https://homecloud.drk1rd.systems/install.sh
+   curl -LO https://homecloud.drk1rd.systems/scripts/install.sh
    chmod +x install.sh
    ./install.sh
    ``` 

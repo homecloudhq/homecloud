@@ -27,49 +27,12 @@ HomeCloud is an open-source, self-hosted cloud platform for **compute, storage, 
 
 ---
 
-## 🧰 **Installation Scripts & Releases (Experimental)**  
-
-🚧 **Current Status:** Experimental — We're working hard to make it easy for you to set up HomeCloud with minimal effort! Currently, these installation scripts are in their early stages and may have bugs or require manual configuration for certain systems.
-
-🔹 **What’s Included?**  
-  - **Installation Scripts** — Easy-to-use scripts for installing HomeCloud on various platforms (Linux/macOS/Windows).
-  - **Automated Checks** — The script will ensure that all requirements are met and installed before setting up HomeCloud.
-  - **Automatic Binary Download** — For Linux and macOS, the correct version of HomeCloud will be downloaded and set up for you.
-
-⚠️ **Note:**  
-  - These scripts are **NOT YET FULLY STABLE** and are part of our early efforts to simplify the installation process.
-  - If you run into issues, please report them via our GitHub **[Issues](https://github.com/homecloudhq/homecloud/issues)**, and we’ll work on a fix.
-
-### 🖥️ **How to Run the Installation Scripts**
-
-1. **Windows**  
-   - Download and run the `scripts/install.ps1` PowerShell script to install HomeCloud.  
-   - The script checks if Docker is installed and prompts you to install it if missing.  
-   - To run, simply execute the following command in PowerShell:
-
-   ```powershell
-   .\install.ps1
-   ```
-
-2. **Linux/macOS**  
-   - Download and run the `scripts/install.sh` shell script to install HomeCloud.  
-   - The script checks for Docker and installs it if not already present.  
-   - To run the script, open your terminal and execute the following commands:
-
-   ```bash
-   chmod +x install.sh
-   ./install.sh
-   ```
-  - **Upcoming releases will focus on stability and more user-friendly setup.**
-
----
-
 ## 🗺️ **Roadmap**  
 
 We’re building HomeCloud in phases — here’s what’s next:  
 
-🔧 **Phase 1:** Core services — Compute, Storage, Networking 🔃  
-⚡ **Phase 2:** Serverless functions & event-driven architecture  🔃   
+🔧 **Phase 1:** Core services — Compute, Storage, Networking ✅  
+⚡ **Phase 2:** Serverless functions & event-driven architecture  
 📊 **Phase 3:** Monitoring, logging, and performance insights  
 🔌 **Phase 4:** Hardware integrations and edge computing support  
 

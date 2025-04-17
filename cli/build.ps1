@@ -8,7 +8,7 @@ if (-Not (Test-Path -Path "dist")) {
 }
 
 Write-Host "Building for Windows..."
-go build -ldflags "-X github.com/homecloudhq/homecloud/cli/cmd.Version=$version -X github.com/homecloudhq/homecloud/cli/cmd.Commit=$commit" -o dist/homecloud.exe main.go
+go build -ldflags "-X github.com/homecloudhq/homecloud/cli/cmd.Version=$version -X github.com/homecloudhq/homecloud/cli/cmd.Commit=$commit" -o dist/homecloud-windows.exe main.go
 
 Write-Host "Building for Linux..."
 $env:GOOS = "linux"
@@ -18,6 +18,6 @@ go build -ldflags "-X github.com/homecloudhq/homecloud/cli/cmd.Version=$version 
 Write-Host "Building for macOS (arm64)..."
 $env:GOOS = "darwin"
 $env:GOARCH = "arm64"
-go build -ldflags "-X github.com/homecloudhq/homecloud/cli/cmd.Version=$version -X github.com/homecloudhq/homecloud/cli/cmd.Commit=$commit" -o dist/homecloud-mac main.go
+go build -ldflags "-X github.com/homecloudhq/homecloud/cli/cmd.Version=$version -X github.com/homecloudhq/homecloud/cli/cmd.Commit=$commit" -o dist/homecloud-macos main.go
 
 Write-Host "Done!"

@@ -4,6 +4,22 @@
 
 > 🛡 Built with privacy, transparency, and sovereignty at its core.
 
+#### Supported By
+
+<p align="center" >
+  <a href="https://tailscale.com/">
+    <img src="https://logovectorseek.com/wp-content/uploads/2023/04/tailscale-inc-logo-vector.png" 
+         alt="Tailscale" height="70"/>
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://coderabbit.ai/">
+    <img src="https://sindresorhus.com/assets/thanks/coderabbit-logo.png" 
+         alt="Coderabbit" height="40"/>
+  </a>
+</p>
+
 ---
 
 ## 🔥 Why HomeCloud?

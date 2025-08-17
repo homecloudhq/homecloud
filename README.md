@@ -4,7 +4,7 @@
 
 > 🛡 Built with privacy, transparency, and sovereignty at its core.
 
-#### Supported By
+#### Support Partners
 
 <p align="center" >
   <a href="https://tailscale.com/">

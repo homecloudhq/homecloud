@@ -1,55 +1,95 @@
-# ☁️ **HomeCloud** — *Cloud, Owned by You.*  
+# ☁️ HomeCloud — The Cloud, Owned by You
 
-Bring the power of the cloud to your own hardware — **no third parties, no lock-in, no hidden costs.**  
-HomeCloud is an open-source, self-hosted cloud platform for **compute, storage, networking, and databases** — all in one click.  
+**An open-source, self-hosted cloud platform** for compute, storage, networking, and databases — all in one click. No third parties. No vendor lock-in. No surprise billing.
 
----
+> 🛡 Built with privacy, transparency, and sovereignty at its core.
 
-## 🔥 **Why HomeCloud?**  
+#### Support Partners
 
-💡 **Take Control** — Your data stays yours. No vendors, no surveillance.  
-💰 **Slash Costs** — No pay-as-you-go billing. Your hardware, your rules.  
-🚀 **One-Click Deployments** — Launch services in seconds, no sysadmin degree needed.  
-🌍 **Open-Source Freedom** — Built by the community, for the community.  
+<p align="center" >
+  <a href="https://tailscale.com/">
+    <img src="https://logovectorseek.com/wp-content/uploads/2023/04/tailscale-inc-logo-vector.png" 
+         alt="Tailscale" height="70"/>
+  </a>
+</p>
 
-[✨ Learn more about HomeCloud](https://homecloud.suryansh.one/files/but,%20why_.pdf)
-
----
-
-## 🛠️ **Core Features**  
-
-🔹 **Compute:** Spin up containers, VMs, or apps locally.  
-🔹 **Storage:** Self-hosted object storage (S3-compatible).  
-🔹 **Databases:** One-click PostgreSQL, Redis, and more.  
-🔹 **Networking:** Handle traffic with powerful routing & load balancing.  
-
-✨ **More features in the pipeline — stay tuned!**
+<p align="center">
+  <a href="https://coderabbit.ai/">
+    <img src="https://sindresorhus.com/assets/thanks/coderabbit-logo.png" 
+         alt="Coderabbit" height="40"/>
+  </a>
+</p>
 
 ---
 
-## 🗺️ **Roadmap**  
+## 🔥 Why HomeCloud?
 
-We’re building HomeCloud in phases — here’s what’s next:  
+* **💡 Take Back Control** — Your data stays *yours*. No surveillance, no dependency on external providers.
+* **💰 Eliminate Cloud Costs** — Forget unpredictable bills. Use your own hardware with full control.
+* **🚀 One-Click Deployments** — Launch services instantly without a sysadmin degree.
+* **🌍 Community-First & Open-Source** — Released under AGPL-3.0, developed with and for the community.
 
-🔧 **Phase 1:** Core services — Compute, Storage, Networking ✅  
-⚡ **Phase 2:** Serverless functions & event-driven architecture  
-📊 **Phase 3:** Monitoring, logging, and performance insights  
-🔌 **Phase 4:** Hardware integrations and edge computing support  
+---
+
+## 🛠️ Core Features
+
+| Feature       | Description                                            |
+| ------------- | ------------------------------------------------------ |
+| 🖥️ Compute   | Run containers, VMs, or apps locally on your hardware. |
+| 💾 Storage    | Built-in object storage (S3-compatible).               |
+| 🧠 Databases  | Launch PostgreSQL, Redis, and others with one click.   |
+| 🌐 Networking | Native traffic routing, SSL, and load balancing.       |
+
+> 💡 Upcoming: Serverless functions, hardware integrations, monitoring tools, and more.
+
+---
+
+## 🚧 Installation (Experimental)
+
+### Windows
+
+```powershell
+Invoke-WebRequest -Uri "https://homecloud.drk1rd.systems/scripts/install.ps1" -OutFile "install.ps1"
+.\install.ps1
+```
+
+### Linux / macOS
+
+```bash
+curl -LO https://homecloud.drk1rd.systems/scripts/install.sh
+chmod +x install.sh
+./install.sh
+```
+
+> ⚠️ *Experimental*: These installers are in early stages and may require manual configuration.
+
+---
+
+## 🗺️ Roadmap
+
+* ✅ **Phase 1:** Core cloud stack — Compute, Storage, Networking
+* 🔄 **Phase 2:** Serverless architecture & event-driven services
+* 🔄 **Phase 3:** Observability — Monitoring, logging, alerts
+* 🔄 **Phase 4:** Edge compute & hardware integrations
 
 📍 **[Explore the full roadmap](https://github.com/orgs/homecloudhq/projects/1/views/1)**
 
 ---
 
-## 🛡️ **License**  
+## 💸 Sustainability & Support
 
-HomeCloud is released under **GNU AGPL-3.0** — keeping it open and community-driven.  
-**If you modify or share HomeCloud publicly, your changes must stay open too.**  
+HomeCloud is a community project, currently unfunded and maintained by volunteers.
 
-📜 **[Read the full license](./LICENSE)**  
+
+### 💛 Ways to Support
+
+* [ ] Sponsor development via GitHub Sponsors / Open Collective (Coming Soon)
+* [ ] Contribute infrastructure, bugfixes, or UX improvements
+* [ ] Share HomeCloud with your communities!
 
 ---
 
-## 💪 **Get Involved**  
+## 🤝 Get Involved
 
 We’re building HomeCloud for the community — and we’d love for you to join us:  
 
@@ -60,7 +100,15 @@ We’re building HomeCloud for the community — and we’d love for you to join
 🔹 **By contributing, you agree to our** [**Contributor License Agreement (CLA)**](./CLA.md).
 
 ---
-  
-⚡ **HomeCloud — The Cloud, On Your Terms.**  
+
+## 🛡 License
+
+HomeCloud is released under **GNU AGPL-3.0** — keeping it open, transparent, and libre.
+If you deploy or modify it publicly, share your changes too.
 
 ---
+
+## ⚡ HomeCloud — The Cloud, On Your Terms.
+
+---
+
